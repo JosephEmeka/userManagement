@@ -1,5 +1,5 @@
 FROM maven:3.8.7 as build
-COPY . .
+COPY user_management .
 RUN mvn -8 clean  package -DskipTests
 
 FROM openjdk:17
