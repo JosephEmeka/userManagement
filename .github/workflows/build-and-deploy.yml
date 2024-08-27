@@ -3,7 +3,7 @@ name: Deploy Dockerhub
 on:
   push:
     branches:
-      - dev
+      - in-dev
 
 jobs:
   build-and-deploy:
@@ -36,7 +36,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build Docker image
-        run: docker build -t user_management:latest .
+        run: docker build -t josephemekaonah/user_management:latest .
 
       - name: Push Docker image to Docker Hub
         run: docker push josephemekaonah/user_management:latest
