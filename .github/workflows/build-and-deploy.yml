@@ -1,4 +1,4 @@
-name: Deploy Dockerhub
+name: Build and Deploy to AWS EC2
 
 on:
   push:
@@ -40,3 +40,37 @@ jobs:
 
       - name: Push Docker image to Docker Hub
         run: docker push josephemekaonah/user_management:latest
+
+      - name: SSH into AWS EC2 and deploy Docker image
+        uses: appleboy/ssh-action@v0.1.3
+        with:
+          host: ${{ secrets.INSTANCE_IP }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY_WINDOWS }}
+          port: 22
+          script: |
+            echo "Stopping and removing existing Docker container"
+            docker stop my-app || true && docker rm my-app || true
+
+            echo "Pulling latest Docker image from Docker Hub"
+            docker pull your-dockerhub-username/my-app:latest
+
+            echo "Running new Docker container"
+            docker run -d --name my-app -p 8080:8080 your-dockerhub-username/my-app:latest
+
+            echo "Checking if Docker container is running"
+            docker ps
+
+      - name: Verify deployment
+        run: |
+          echo "Checking if the application is accessible on the EC2 instance"
+          curl http://$INSTANCE_IP:8080
+          
+          
+      
+        
+        
+        
+
+        
+              
