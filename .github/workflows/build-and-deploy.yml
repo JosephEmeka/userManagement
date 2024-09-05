@@ -14,7 +14,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Set up JDK 17
-        uses: actions/checkout@v2
+        uses: actions/setup-java@v2
         with:
           java-version: '17'
           distribution: 'temurin'
@@ -27,7 +27,6 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('/*.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
@@ -53,10 +52,10 @@ jobs:
             docker stop my-app || true && docker rm my-app || true
 
             echo "Pulling latest Docker image from Docker Hub"
-            docker pull your-dockerhub-username/my-app:latest
+            docker pull josephemekaonah/user_management:latest
 
             echo "Running new Docker container"
-            docker run -d --name my-app -p 8080:8080 your-dockerhub-username/my-app:latest
+            docker run -d --name my-app -p 8080:8080 josephemekaonah/user_management:latest
 
             echo "Checking if Docker container is running"
             docker ps
@@ -65,12 +64,3 @@ jobs:
         run: |
           echo "Checking if the application is accessible on the EC2 instance"
           curl http://$INSTANCE_IP:8080
-          
-          
-      
-        
-        
-        
-
-        
-              
